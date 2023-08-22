@@ -2,21 +2,28 @@ import { withAuthAdmin } from "@/HOC/withAuthAdmin";
 import PageDescription from "@/components/admin/PageDescription";
 import CreateNft from "@/components/admin/modals/CreateNft";
 import { useGetAllNftDataQuery } from "@/redux/services/nftService";
+import React, { useEffect } from "react";
 import { Nft } from "@prisma/client";
 import { NftColumns, columns } from "@/components/admin/table/nft/NftColumns";
 import { DataTable } from "@/components/ui/data-table";
-import LoadingSpinner from "@/components/LoadingSpinner";
+import { useAppSelector } from "@/redux/store";
+import { ApiResponse } from "@/types/typing";
 
 const NftPage = () => {
-  const { data: res, error, isLoading, refetch } = useGetAllNftDataQuery({});
-  const nfts = res?.data as Nft[];
+  const { error, isLoading } = useGetAllNftDataQuery({});
+  const nftsResponse: ApiResponse<Nft[]> = useAppSelector(
+    (state) => state.nfts
+  );
+  const nfts = nftsResponse?.data as Nft[];
 
-  const formatDataforTable: NftColumns[] = nfts?.map((nft) => ({
-    id: nft.id,
+  const formatDataforTable: NftColumns[] = nfts?.map((nft, index) => ({
+    id: index + 1,
     name: nft.name,
     imageUrl: nft.imageUrl,
-    createdAt: new Date(nft.createdAt).toLocaleString("tr-TR"),
+    createdAt: new Intl.DateTimeFormat("tr-TR").format(new Date(nft.createdAt)),
   }));
+
+  //console.log("DATA:", asd);
   return (
     <main>
       <div className="border-b flex items-center justify-between">
@@ -25,19 +32,15 @@ const NftPage = () => {
           title="NFT's"
           description="Manage NFT's"
         />
-        <CreateNft refetch={refetch} />
+        <CreateNft />
       </div>
       {error ? (
-        <div className="w-full flex items-center justify-center h-40">
-          An error occured.
-        </div>
+        <>An error occurred.</>
       ) : isLoading ? (
-        <div className="w-full flex items-center justify-center h-40">
-          <LoadingSpinner />
-        </div>
-      ) : (
+        <>Loading...</>
+      ) : nfts ? (
         <DataTable columns={columns} data={formatDataforTable} />
-      )}
+      ) : null}
     </main>
   );
 };

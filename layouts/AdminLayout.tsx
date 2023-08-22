@@ -9,9 +9,9 @@ interface LayoutProps {
 
 export default function AdminLayout({ children }: LayoutProps) {
   return (
-    <>
+    <div className="max-w-[1440px] mx-auto">
       <Navbar />
       <main className={`p-4 ${inter.className}`}>{children}</main>
-    </>
+    </div>
   );
 }

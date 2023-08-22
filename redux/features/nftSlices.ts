@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Nft } from "@prisma/client";
+import { nftService } from "../services/nftService";
 
 const initialState: Nft[] = [];
 
@@ -8,11 +9,20 @@ const nftsSlice = createSlice({
   initialState,
   reducers: {
     setNFTs: (state, action: PayloadAction<Nft[]>) => {
-      state = action.payload;
+      return action.payload;
     },
     addNFT: (state, action: PayloadAction<Nft>) => {
-      state.push(action.payload);
+      const nft = action.payload;
+      return [...state, nft];
     },
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      nftService.endpoints.getAllNftData.matchFulfilled,
+      (state, { payload }) => {
+        return payload;
+      }
+    );
   },
 });
 

@@ -12,16 +12,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useCreateNftMutation } from "@/redux/services/nftService";
-import { useHandleApiResponse } from "@/hooks/useHandleApiResponse";
+import { toast } from "react-hot-toast";
 
 interface IFormInput {
   name: string;
   imageUrl: string;
 }
 
-export default function CreateNft() {
+export default function CreateNft({ refetch }: any) {
   const [createNft, { isLoading }] = useCreateNftMutation();
-  const handleApiResponse = useHandleApiResponse();
   const [open, setOpen] = useState(false);
   const {
     register,
@@ -31,9 +30,17 @@ export default function CreateNft() {
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     const response: any = await createNft(data);
-    await handleApiResponse(response);
+    if ("data" in response) {
+      toast.success(response.data.message);
+      setOpen(false);
+      refetch();
+    } else if ("error" in response) {
+      console.log(response.error.data.message);
+      toast.error(response.error.data.message);
+    } else {
+      toast.error("An error occurred.");
+    }
   };
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <Button onClick={() => setOpen(true)}>Add New</Button>

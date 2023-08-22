@@ -19,14 +19,13 @@ export default async function handler(
   if (requestMethod == "POST") {
     try {
       const { name, imageUrl } = req.body;
-      console.log("ASDSAD", name, imageUrl);
       const session = await getServerSession(req, res, authOptions);
 
-      if (session?.user.isAdmin !== true) {
-        return res
-          .status(403)
-          .json({ isSuccess: false, message: "Access Denied!" });
-      }
+      // if (session?.user.isAdmin !== true) {
+      //   return res
+      //     .status(403)
+      //     .json({ isSuccess: false, message: "Access Denied!" });
+      // }
 
       if (!name || !imageUrl) {
         return res

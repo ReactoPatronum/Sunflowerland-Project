@@ -6,7 +6,7 @@ import { Nft } from "@prisma/client";
 type Data = {
   isSuccess: boolean;
   message: string;
-  allNfts?: Nft[];
+  data?: Nft[];
 };
 
 export default async function handler(
@@ -16,10 +16,10 @@ export default async function handler(
   const requestMethod = req.method;
   if (requestMethod == "GET") {
     try {
-      const allNfts: Nft[] = await prismadb.nft.findMany();
+      const data: Nft[] = await prismadb.nft.findMany();
       return res
         .status(200)
-        .json({ isSuccess: true, message: "Fetched all nft records", allNfts });
+        .json({ isSuccess: true, message: "Fetched all nft records", data });
     } catch (error) {
       console.error(error);
       res.status(500).json({ isSuccess: false, message: "An error occurred." });

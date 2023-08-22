@@ -18,8 +18,31 @@ export const nftService = createApi({
           },
         }),
       }),
+      getAllNftData: builder.query({
+        query: () => {
+          return {
+            url: `nft/getAll`,
+            method: "GET",
+          };
+        },
+      }),
+      deleteNft: builder.mutation({
+        query: (args) => {
+          return {
+            url: `nft/${args}`,
+            method: "DELETE",
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          };
+        },
+      }),
     };
   },
 });
 
-export const { useCreateNftMutation } = nftService;
+export const {
+  useCreateNftMutation,
+  useGetAllNftDataQuery,
+  useDeleteNftMutation,
+} = nftService;
