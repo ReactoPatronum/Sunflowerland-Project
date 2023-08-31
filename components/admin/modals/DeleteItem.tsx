@@ -10,7 +10,12 @@ import { Trash } from "../../../node_modules/lucide-react";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 
-const DeleteItem = ({ action, isLoading }: any) => {
+type ItemProps = {
+  action: () => Promise<void>;
+  isLoading: boolean;
+};
+
+const DeleteItem = ({ action, isLoading }: ItemProps) => {
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>

@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useCreateNftMutation } from "@/redux/services/nftService";
 import { toast } from "react-hot-toast";
+import handleApiError from "@/helpers/handleApiErrors";
 
 interface IFormInput {
   name: string;
@@ -34,12 +35,8 @@ export default function CreateNft({ refetch }: any) {
       toast.success(response.data.message);
       setOpen(false);
       refetch();
-    } else if ("error" in response) {
-      console.log(response.error.data.message);
-      toast.error(response.error.data.message);
-    } else {
-      toast.error("An error occurred.");
     }
+    handleApiError(response);
   };
   return (
     <Dialog open={open} onOpenChange={setOpen}>

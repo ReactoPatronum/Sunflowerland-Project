@@ -20,6 +20,11 @@ export default function Navbar() {
       label: "NFT's",
       active: pathname === `/administrator/nft`,
     },
+    {
+      href: `/administrator/user`,
+      label: "User's",
+      active: pathname === `/administrator/user`,
+    },
   ];
   return (
     <nav className={"w-full flex items-center justify-between border-b p-4"}>

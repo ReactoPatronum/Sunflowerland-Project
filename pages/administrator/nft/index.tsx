@@ -5,7 +5,7 @@ import { useGetAllNftDataQuery } from "@/redux/services/nftService";
 import { Nft } from "@prisma/client";
 import { NftColumns, columns } from "@/components/admin/table/nft/NftColumns";
 import { DataTable } from "@/components/ui/data-table";
-import LoadingSpinner from "@/components/LoadingSpinner";
+import TableSkeleton from "@/components/TableSkeleton";
 
 const NftPage = () => {
   const { data: res, error, isLoading, refetch } = useGetAllNftDataQuery({});
@@ -17,6 +17,7 @@ const NftPage = () => {
     imageUrl: nft.imageUrl,
     createdAt: new Date(nft.createdAt).toLocaleString("tr-TR"),
   }));
+
   return (
     <main>
       <div className="border-b flex items-center justify-between">
@@ -32,9 +33,7 @@ const NftPage = () => {
           An error occured.
         </div>
       ) : isLoading ? (
-        <div className="w-full flex items-center justify-center h-40">
-          <LoadingSpinner />
-        </div>
+        <TableSkeleton />
       ) : (
         <DataTable columns={columns} data={formatDataforTable} />
       )}

@@ -26,7 +26,6 @@ export const authOptions: NextAuthOptions = {
         if (user && account) {
           const { email, name, image } = user;
           const { provider } = account;
-
           if (name && email && image) {
             const getUser = await prismadb.user.findUnique({
               where: {
